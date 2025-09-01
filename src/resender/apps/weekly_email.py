@@ -7,13 +7,14 @@ from resender.emails.sender import send_email
 email_image = (
     modal.Image.debian_slim(python_version="3.11")
     .pip_install("resend")
+    .add_local_python_source("resender")
 )
 
 # Create the Modal application
 app = modal.App("weekly-email-app")
 
 # Reference a secret containing your RESEND_API_KEY (create this in the Modal dashboard or CLI)
-resend_secret = modal.Secret.from_name("resend-api-key")
+resend_secret = modal.Secret.from_name("resend-secret")
 
 # --- Scheduling ---
 # For testing, schedule the function every 10 minutes. Once testing is complete,
@@ -47,10 +48,5 @@ def send_weekly_email():
 @app.local_entrypoint()
 def main():
     """Test the email-sending function locally."""
-    if modal.is_local():
-        # Use local SECRET for testing if running locally
-        local_secret = modal.Secret.from_dict({"RESEND_API_KEY": os.environ.get("RESEND_API_KEY", "")})
-        with app.run(secrets=[local_secret], image=email_image):
-            send_weekly_email.remote()
-    else:
-        send_weekly_email.remote()
+    # Secrets are attached to the function; just invoke it remotely.
+    send_weekly_email.remote()

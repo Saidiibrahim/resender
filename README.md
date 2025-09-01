@@ -28,13 +28,15 @@ pip install -e ".[dev]"
 
 ### Modal secret
 
-Create a secret named `resend-api-key` that holds `RESEND_API_KEY`.
+Use an existing secret named `resend-secret` that contains the key `RESEND_API_KEY` (as in the Modal dashboard screenshot). If you need to create it from the CLI:
 
 ```bash
-modal secret create resend-api-key RESEND_API_KEY=YOUR_KEY
+modal secret create resend-secret RESEND_API_KEY=YOUR_KEY
 ```
 
 ### Run locally
+
+Src-layout note: the Modal images now include the local `resender` package via `Image.add_local_python_source("resender")`, so imports work when running remotely and you do not need to set `PYTHONPATH`.
 
 ```bash
 modal run src/resender/apps/weekly_email.py

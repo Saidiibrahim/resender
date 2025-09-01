@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 
 import modal
@@ -8,10 +7,11 @@ from resender.emails.sender import send_email
 email_image = (
     modal.Image.debian_slim(python_version="3.11")
     .pip_install("resend")
+    .add_local_python_source("resender")
 )
 
 app = modal.App("karpathy-daily-quote")
-resend_secret = modal.Secret.from_name("resend-api-key")
+resend_secret = modal.Secret.from_name("resend-secret")
 
 
 # Daily at 9 AM Adelaide time
@@ -73,7 +73,11 @@ def _quote_text() -> str:
     )
 
 
-@app.function(image=email_image, schedule=daily_schedule, secrets=[resend_secret])
+@app.function(
+    image=email_image,
+    schedule=daily_schedule,
+    secrets=[resend_secret],
+)
 def send_karpathy_daily_quote():
     subject = "Daily Wisdom: How to Become an Expert"
     date_str = datetime.now().strftime("%B %d, %Y")
@@ -81,8 +85,8 @@ def send_karpathy_daily_quote():
     text = _quote_text()
 
     send_email(
-        sender="wisdom@yourdomain.com",
-        recipients=["your-email@example.com"],
+        sender="onboarding@resend.dev",
+        recipients=["ibrahim.aka.ajax@gmail.com"],
         subject=subject,
         html=html,
         text=text,
@@ -91,11 +95,7 @@ def send_karpathy_daily_quote():
 
 @app.local_entrypoint()
 def main():
-    if modal.is_local():
-        local_secret = modal.Secret.from_dict({"RESEND_API_KEY": os.environ.get("RESEND_API_KEY", "")})
-        with app.run(secrets=[local_secret], image=email_image):
-            send_karpathy_daily_quote.remote()
-    else:
-        send_karpathy_daily_quote.remote()
+    # Secrets are attached to the function; just invoke it remotely.
+    send_karpathy_daily_quote.remote()
 
 
