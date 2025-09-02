@@ -27,6 +27,7 @@ current_schedule = modal.Cron("*/10 * * * *", timezone="Australia/Adelaide")
 # Weekly schedule (commented out): runs every Monday at 9 AM Adelaide time.
 # weekly_schedule = modal.Cron("0 9 * * 1", timezone="Australia/Adelaide")
 
+
 @app.function(
     image=email_image,
     schedule=current_schedule,
@@ -44,6 +45,7 @@ def send_weekly_email():
             <p>This is a test email.</p>
         """,
     )
+
 
 @app.local_entrypoint()
 def main():

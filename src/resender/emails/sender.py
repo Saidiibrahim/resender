@@ -46,5 +46,3 @@ def send_email(
     if text is not None and text.strip():
         params["text"] = text
     return resend.Emails.send(params)
-
-

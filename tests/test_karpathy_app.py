@@ -3,4 +3,3 @@ def test_import_karpathy_app():
 
     assert hasattr(appmod, "app")
     assert hasattr(appmod, "send_karpathy_daily_quote")
-

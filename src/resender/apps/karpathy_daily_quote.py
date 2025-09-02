@@ -66,7 +66,7 @@ def _quote_html(date_str: str) -> str:
 def _quote_text() -> str:
     return (
         "How to become expert at thing:\n\n"
-        "1. iteratively take on concrete projects and accomplish them depth wise, learning \"on demand\" (ie don't learn bottom up breadth wise)\n\n"
+        '1. iteratively take on concrete projects and accomplish them depth wise, learning "on demand" (ie don\'t learn bottom up breadth wise)\n\n'
         "2. teach/summarize everything you learn in your own words\n\n"
         "3. only compare yourself to younger you, never to others\n\n"
         "— Andrej Karpathy (@karpathy)"
@@ -97,5 +97,3 @@ def send_karpathy_daily_quote():
 def main():
     # Secrets are attached to the function; just invoke it remotely.
     send_karpathy_daily_quote.remote()
-
-

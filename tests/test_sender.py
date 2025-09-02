@@ -3,4 +3,3 @@ def test_import_sender():
 
     assert callable(send_email)
     assert callable(get_resend_api_key)
-
